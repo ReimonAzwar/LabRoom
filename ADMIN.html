@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LabRoom — Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/admin-style.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     LOGIN PAGE
+══════════════════════════════════════ -->
+<div id="login-page">
+  <div class="login-bg"></div>
+  <div class="login-grid"></div>
+  <div class="login-box">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="3"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <div class="logo-text">Lab<span>Room</span></div>
+      </div>
+      <div class="login-title">Selamat Datang, Admin</div>
+      <div class="login-sub">Masuk untuk mengelola pemesanan ruangan lab</div>
+
+      <div class="login-err" id="login-err">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="login-err-text">Username atau password salah.</span>
+      </div>
+
+      <div class="login-field">
+        <label class="login-label">Username</label>
+        <input class="login-input" id="inp-user" type="text" placeholder="Masukkan username" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()"/>
+      </div>
+      <div class="login-field">
+        <label class="login-label">Password</label>
+        <div class="login-input-wrap">
+          <input class="login-input" id="inp-pw" type="password" placeholder="Masukkan password" autocomplete="current-password" style="padding-right:44px" onkeydown="if(event.key==='Enter')doLogin()"/>
+          <button class="toggle-pw" onclick="togglePw()" type="button" id="pw-eye">
+            <svg id="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            <svg id="eye-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <button class="login-btn" id="login-btn" onclick="doLogin()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        Masuk ke Dashboard
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     ADMIN DASHBOARD
+══════════════════════════════════════ -->
+<div id="admin-page">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="tl">
+      <div class="logo-mark" style="width:28px;height:28px;border-radius:8px"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" style="width:15px;height:15px"><rect x="2" y="3" width="20" height="14" rx="3"/><path d="M8 21h8M12 17v4"/></svg></div>
+      <div class="logo-text" style="font-size:16px">Lab<span>Room</span><span class="admin-tag">Admin</span></div>
+    </div>
+    <div class="tr">
+      <div class="user-chip">
+        <div class="user-av"><svg viewBox="0 0 24 24" fill="none" stroke="#0B1426" stroke-width="2.5" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <span class="user-name" id="logged-user">—</span>
+      </div>
+      <button class="btn-sm danger" onclick="doLogout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Keluar
+      </button>
+    </div>
+  </div>
+
+  <div class="admin-body">
+    <!-- SIDEBAR -->
+    <div class="aside">
+      <div class="aside-label">Menu Utama</div>
+      <div class="aside-item active" id="nav-dashboard" onclick="navTo('dashboard',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </div>
+      <div class="aside-item" id="nav-all" onclick="navTo('all',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Semua Pemesanan
+        <span class="a-badge teal" id="a-total">0</span>
+      </div>
+      <div class="aside-item" id="nav-pending" onclick="navTo('pending',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Menunggu Konfirmasi
+        <span class="a-badge red" id="a-pending">0</span>
+      </div>
+      <div class="aside-divider"></div>
+      <div class="aside-label">Ruangan</div>
+      <div id="aside-rooms"></div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+      <div class="ph">
+        <div>
+          <div class="pt">Dashboard Pemesanan</div>
+          <div class="ps">Kelola dan konfirmasi permintaan pemesanan ruangan lab</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-sm" onclick="renderAdmin()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+            Refresh
+          </button>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats">
+        <div class="stat"><div class="stat-lbl">Total Pemesanan</div><div class="stat-val teal" id="s-total">0</div><div class="stat-sub">Semua waktu</div></div>
+        <div class="stat"><div class="stat-lbl">Menunggu Konfirmasi</div><div class="stat-val amber" id="s-pending">0</div><div class="stat-sub">Perlu ditinjau</div></div>
+        <div class="stat"><div class="stat-lbl">Disetujui</div><div class="stat-val green" id="s-approved">0</div><div class="stat-sub">Total disetujui</div></div>
+        <div class="stat"><div class="stat-lbl">Ditolak</div><div class="stat-val red" id="s-rejected">0</div><div class="stat-sub">Total ditolak</div></div>
+      </div>
+
+      <!-- ROOM STATUS PANEL -->
+      <div id="room-panel-section" style="margin-bottom:18px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div style="font-size:13px;font-weight:600;color:var(--text2)">Status &amp; Fasilitas Ruangan</div>
+        </div>
+        <div id="room-panel-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px"></div>
+      </div>
+
+      <!-- FILTER -->
+      <div class="fbar">
+        <button class="fbtn active" onclick="setFilter('all',this)">Semua</button>
+        <button class="fbtn" onclick="setFilter('pending',this)">Menunggu</button>
+        <button class="fbtn" onclick="setFilter('disetujui',this)">Disetujui</button>
+        <button class="fbtn" onclick="setFilter('ditolak',this)">Ditolak</button>
+        <input class="fsearch" placeholder="Cari nama, ruangan, instansi..." oninput="setSearch(this.value)"/>
+      </div>
+
+      <!-- TABLE -->
+      <div class="btable">
+        <div class="thead">
+          <div>Nama Pemohon</div>
+          <div class="col-inst">Instansi</div>
+          <div>Ruangan</div>
+          <div class="col-time">Tanggal &amp; Waktu</div>
+          <div>Status</div>
+          <div>Aksi</div>
+        </div>
+        <div id="blist"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ROOM MANAGEMENT MODAL -->
+<div class="overlay" id="room-mgmt-overlay">
+  <div class="modal" style="max-width:500px">
+    <div class="modal-header">
+      <div class="modal-title" id="rmgmt-title">Kelola Ruangan</div>
+      <div class="modal-sub" id="rmgmt-sub">Edit fasilitas dan status</div>
+    </div>
+    <div class="mfield">
+      <div class="mlabel">Kapasitas (orang)</div>
+      <input id="rmgmt-cap" type="number" min="1" max="200" style="background:var(--slate);border:1px solid var(--border2);border-radius:9px;padding:9px 13px;font-size:13px;color:var(--text);outline:none;width:100%;font-family:var(--font)"/>
+    </div>
+    <div class="mfield">
+      <div class="mlabel">Fasilitas</div>
+      <textarea id="rmgmt-fasilitas" rows="3" placeholder="contoh: 30 PC, Proyektor, AC, WiFi" style="background:var(--slate);border:1px solid var(--border2);border-radius:9px;padding:9px 13px;font-size:13px;color:var(--text);outline:none;width:100%;font-family:var(--font);resize:vertical"></textarea>
+    </div>
+    <div class="mfield">
+      <div class="mlabel">Status Ruangan</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap" id="rmgmt-status-btns">
+        <button class="status-pick available" onclick="pickStatus('available')">✔ Tersedia</button>
+        <button class="status-pick maintenance" onclick="pickStatus('maintenance')">🔧 Maintenance</button>
+        <button class="status-pick closed" onclick="pickStatus('closed')">🚫 Ditutup</button>
+      </div>
+    </div>
+    <div class="mfield" id="rmgmt-until-wrap" style="display:none">
+      <div class="mlabel">Ditutup/Maintenance sampai tanggal</div>
+      <input id="rmgmt-until" type="date" style="background:var(--slate);border:1px solid var(--border2);border-radius:9px;padding:9px 13px;font-size:13px;color:var(--text);outline:none;width:100%;font-family:var(--font)"/>
+      <div style="font-size:11px;color:var(--text3);margin-top:4px">Kosongkan = tidak ada batas waktu</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="mbtn approve" onclick="saveRoomMgmt()">Simpan</button>
+      <button class="mbtn cancel" onclick="closeRoomMgmt()">Batal</button>
+    </div>
+  </div>
+</div>
+
+<!-- ROOM CALENDAR MODAL -->
+<div class="overlay" id="room-cal-overlay">
+  <div class="modal" style="max-width:620px">
+    <div class="modal-header" style="display:flex;align-items:flex-start;justify-content:space-between">
+      <div>
+        <div class="modal-title" id="rc-title">Jadwal Ruangan</div>
+        <div class="modal-sub" id="rc-sub">Kalender reservasi</div>
+      </div>
+      <button class="mbtn cancel" onclick="closeRoomCalendar()" style="flex:none;padding:7px 14px;font-size:12px">Tutup</button>
+    </div>
+    <!-- Month nav -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin:14px 0 10px">
+      <button onclick="rcChangeMonth(-1)" style="background:var(--slate);border:1px solid var(--border2);border-radius:8px;color:var(--text2);cursor:pointer;padding:5px 12px;font-size:13px;font-family:var(--font)">&#8249;</button>
+      <div id="rc-month-label" style="font-size:14px;font-weight:600;color:#fff"></div>
+      <button onclick="rcChangeMonth(1)"  style="background:var(--slate);border:1px solid var(--border2);border-radius:8px;color:var(--text2);cursor:pointer;padding:5px 12px;font-size:13px;font-family:var(--font)">&#8250;</button>
+    </div>
+    <!-- Calendar grid -->
+    <div id="rc-cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:12px"></div>
+    <!-- Day detail -->
+    <div id="rc-day-detail" style="display:none">
+      <div style="font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px" id="rc-day-title"></div>
+      <div id="rc-day-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT BOOKING MODAL -->
+<div class="overlay" id="edit-overlay">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header">
+      <div class="modal-title">Edit Pemesanan</div>
+      <div class="modal-sub" id="edit-sub">—</div>
+    </div>
+    <div class="mfield"><div class="mlabel">Nama Lengkap</div><input class="fc-input" id="edit-nama" type="text" style="background:var(--slate);border:1px solid var(--border2);border-radius:9px;padding:9px 13px;font-size:13px;color:var(--text);outline:none;width:100%"/></div>
+    <div class="mfield"><div class="mlabel">Tanggal</div><input class="fc-input" id="edit-tanggal" type="date" style="background:var(--slate);border:1px solid var(--border2);border-radius:9px;padding:9px 13px;font-size:13px;color:var(--text);outline:none;width:100%"/></div>
+    <div class="mfield"><div class="mlabel">Jam Mulai</div><input class="fc-input" id="edit-mulai" type="time" style="background:var(--slate);border:1px solid var(--border2);border-radius:9px;padding:9px 13px;font-size:13px;color:var(--text);outline:none;width:100%"/></div>
+    <div class="mfield"><div class="mlabel">Jam Selesai</div><input class="fc-input" id="edit-selesai" type="time" style="background:var(--slate);border:1px solid var(--border2);border-radius:9px;padding:9px 13px;font-size:13px;color:var(--text);outline:none;width:100%"/></div>
+    <div class="mfield"><div class="mlabel">Keperluan</div><input class="fc-input" id="edit-kep" type="text" style="background:var(--slate);border:1px solid var(--border2);border-radius:9px;padding:9px 13px;font-size:13px;color:var(--text);outline:none;width:100%"/></div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="mbtn approve" onclick="saveEdit()">Simpan</button>
+      <button class="mbtn cancel" onclick="closeEdit()">Batal</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETAIL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="m-title">Detail Pemesanan</div>
+      <div class="modal-sub" id="m-sub">—</div>
+    </div>
+    <div class="mfield"><div class="mlabel">Nama Lengkap</div><div class="mval" id="m-nama">—</div></div>
+    <div class="mfield"><div class="mlabel">Instansi / Fakultas</div><div class="mval" id="m-inst">—</div></div>
+    <div class="mfield"><div class="mlabel">No. HP / Email</div><div class="mval" id="m-kontak">—</div></div>
+    <div class="mfield"><div class="mlabel">Ruangan</div><div class="mval" id="m-room">—</div></div>
+    <div class="mfield"><div class="mlabel">Tanggal &amp; Waktu</div><div class="mval" id="m-time">—</div></div>
+    <div class="mfield"><div class="mlabel">Keperluan</div><div class="mval" id="m-kep">—</div></div>
+
+    <!-- Timeline in modal -->
+    <div class="modal-tl" id="modal-tl">
+      <div class="modal-tl-label">Peta jadwal ruangan pada hari tersebut:</div>
+      <div class="modal-tl-bar" id="m-tl-bar"></div>
+      <div class="modal-tl-ticks"><span>07:00</span><span>09:00</span><span>11:00</span><span>13:00</span><span>15:00</span><span>17:00</span></div>
+    </div>
+
+    <div class="mwarn" id="m-warn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="m-warn-text">—</span>
+    </div>
+
+    <div class="mactions">
+      <button class="mbtn approve" id="m-approve">Setujui</button>
+      <button class="mbtn reject"  id="m-reject">Tolak</button>
+      <button class="mbtn cancel"  onclick="closeModal()">Tutup</button>
+    </div>
+  </div>
+</div>
+
+
+<script src="js/admin-core.js"></script>
+</body>
+</html>
