@@ -1785,3 +1785,4 @@ init();
 
 </body>
 </html>
+<?php /**PATH C:\xampp\htdocs\LabRoom\resources\views/user.blade.php ENDPATH**/ ?>

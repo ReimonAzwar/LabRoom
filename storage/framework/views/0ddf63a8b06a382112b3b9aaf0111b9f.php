@@ -770,3 +770,4 @@ const sty=document.createElement('style');sty.textContent='@keyframes spin{to{tr
 </script>
 </body>
 </html>
+<?php /**PATH C:\xampp\htdocs\LabRoom\resources\views/admin_panel.blade.php ENDPATH**/ ?>
