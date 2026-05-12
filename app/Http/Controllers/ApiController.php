@@ -16,11 +16,11 @@ class ApiController extends Controller
         $data = $rooms->map(function ($room) {
             return [
                 'id' => $room->id,
-                'name' => $room->nama_ruang,
-                'cap' => $room->kapasitas,
+                'name' => $room->name,
+                'cap' => $room->cap,
                 'fasilitas' => $room->fasilitas,
-                'status' => $room->status == 'dibuka' ? 'available' : ($room->status == 'maintenance' ? 'maintenance' : 'closed'),
-                'closedUntil' => $room->batas_tutup
+                'status' => $room->status,
+                'closedUntil' => $room->closedUntil
             ];
         });
         return response()->json($data);
@@ -33,7 +33,7 @@ class ApiController extends Controller
             return [
                 'id' => $b->id,
                 'ruangan_id' => $b->room_id,
-                'ruangan' => $b->room ? $b->room->nama_ruang : 'Unknown',
+                'ruangan' => $b->room ? $b->room->name : 'Unknown',
                 'nama' => $b->nama,
                 'instansi' => $b->instansi,
                 'kontak' => $b->kontak,
@@ -61,7 +61,7 @@ class ApiController extends Controller
             'keperluan' => 'required',
         ]);
 
-        $room = Room::where('nama_ruang', $request->room_name)->first();
+        $room = Room::where('name', $request->room_name)->first();
         if (!$room) return response()->json(['success' => false, 'message' => 'Room not found'], 404);
 
         $booking = Booking::create([
@@ -99,15 +99,14 @@ class ApiController extends Controller
 
     public function updateRoom(Request $request, $name)
     {
-        $room = Room::where('nama_ruang', $name)->firstOrFail();
+        $room = Room::where('name', $name)->firstOrFail();
         
-        if ($request->has('cap')) $room->kapasitas = $request->cap;
+        if ($request->has('cap')) $room->cap = $request->cap;
         if ($request->has('fasilitas')) $room->fasilitas = $request->fasilitas;
         if ($request->has('status')) {
-            $st = $request->status;
-            $room->status = $st == 'available' ? 'dibuka' : ($st == 'maintenance' ? 'maintenance' : 'ditutup');
+            $room->status = $request->status;
         }
-        if ($request->has('closedUntil')) $room->batas_tutup = $request->closedUntil ?: null;
+        if ($request->has('closedUntil')) $room->closedUntil = $request->closedUntil ?: null;
 
         $room->save();
         return response()->json(['success' => true]);
